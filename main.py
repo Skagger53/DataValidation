@@ -144,3 +144,10 @@ class InvalidTypePassed(Exception):
     def __init__(self, relevant_variable, type_passed, type_needed):
         message = f"Argument {relevant_variable} must be {type_needed}. Received {type_passed}."
         super().__init__(message)
+
+# Exception if lists/tuples provided to a method have unmatched lengths when they must match (e.g., they will be zipped).
+class InvalidListLength(Exception):
+    def __init__(self, lists_tuples):
+        lists_tuples_to_user = ", ".join([l_t for l_t in lists_tuples])
+        message = f"These lists/tuples have unmatched lengths: {lists_tuples_to_user}. Lengths must match."
+        super().__init__(message)
