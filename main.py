@@ -61,7 +61,7 @@ class DataValidation:
     # Allows user to go back (returns "back").
     # Returns False for a failed check. Returns "back" if user wants to go back. Returns stripped user's input if succeeded.
     def validate_user_input_custom(self, user_input, acceptable):
-        self.check_types_to_raise_exc((user_input, acceptable), (str, (list, tuple), str), ("user_input", "acceptable"))
+        self.check_types_to_raise_exc((user_input, acceptable), (str, (list, tuple)), ("user_input", "acceptable"))
 
         user_input = user_input.strip()
         user_input_l = user_input.lower()
