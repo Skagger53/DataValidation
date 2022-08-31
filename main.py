@@ -3,7 +3,7 @@ import datetime
 class DataValidation:
     # Validates user input against any criteria for numbers.
     # Set relevant parameters to False when calling this method to disallow those inputs (e.g., if you do NOT want to allow negative numbers, set negative_num = False). By default all rational numbers are allowed (all parameters are set to True).
-    # Allows user to go back (returns "back").
+    # If allow_back is True, user may enter "back".
     # Returns False is failed. Returns the user's input as string if succeeds.
     def validate_user_input_num(self, user_input, float_num = True, negative_num = True, zero_num = True, positive_num = True, allow_back = True):
         self.check_types_to_raise_exc((user_input, float_num, negative_num, zero_num, positive_num, allow_back), ((str, int, float), bool, bool, bool, bool, bool), ("user_input", "float_num", "negative_num", "zero_num", "positive_num", "allow_back"))
@@ -21,7 +21,7 @@ class DataValidation:
         invalid_positive_num = "\nYour input may not be positive.\n\n(Press Enter.)\n"
 
         user_input = user_input.strip().lower()
-        orig_user_input = user_input
+        orig_user_input = user_input.strip()
 
         if user_input == "": return False
 
@@ -59,7 +59,7 @@ class DataValidation:
     # Validates user input based on custom tuple in "acceptable" argument.
     # This does not loop; this should be called within a loop obtaining user's input.
     # user_input is not case-sensitive. Elements in acceptable list/tuple are case-sensitive. (Ideally elements in acceptable should each be all lower case or all upper case.)
-    # Allows user to go back (returns "back").
+    # If allow_back is True, user may enter "back".
     # Returns False for a failed check. Returns "back" if user wants to go back. Returns stripped user's input if succeeded.
     def validate_user_input_custom(self, user_input, acceptable, allow_back = True):
         self.check_types_to_raise_exc((user_input, acceptable, allow_back), (str, (list, tuple), bool), ("user_input", "acceptable", "allow_back"))
@@ -79,7 +79,7 @@ class DataValidation:
     # Validates user input as a date.
     # This does not loop; this should be called within a loop obtaining user's input.
     # NOT case-sensitive. Commas do not matter.
-    # Allows user to go back (returns "back").
+    # If allow_back is True, user may enter "back".
     # Returns False for a failed check. Returns "back" if user wants to go back. Returns datetime object if succeeded.
     def validate_User_input_date(self, user_input, allow_back = True):
         self.check_types_to_raise_exc((user_input, allow_back), (str, bool), ("user_input", "allow_back"))
@@ -89,7 +89,7 @@ class DataValidation:
         user_input = user_input.strip().lower().replace(",", "").replace("-", "/").replace(".", "/")
 
         if allow_back == True:
-            if user_input == "back": return "back"
+            if user_input.lower() == "back": return "back"
 
         # Tuples to be cycled through for checks
         # no_year_input_test is testing when the user enters a month and day and the year will then be assumed to be the current year.
