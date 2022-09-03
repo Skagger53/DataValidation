@@ -81,7 +81,7 @@ class DataValidation:
     # NOT case-sensitive. Commas do not matter.
     # If allow_back is True, user may enter "back".
     # Returns False for a failed check. Returns "back" if user wants to go back. Returns datetime object if succeeded.
-    def validate_User_input_date(self, user_input, allow_back = True):
+    def validate_user_input_date(self, user_input, allow_back = True):
         self.check_types_to_raise_exc((user_input, allow_back), (str, bool), ("user_input", "allow_back"))
 
         if user_input == "": return False
