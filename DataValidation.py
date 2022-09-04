@@ -1,17 +1,22 @@
 import datetime
+import re
 
 class DataValidation:
     # Validates user input against any criteria for numbers.
     # Set relevant parameters to False when calling this method to disallow those inputs (e.g., if you do NOT want to allow negative numbers, set negative_num = False). By default all rational numbers are allowed (all parameters are set to True).
-    # If allow_back is True, user may enter "back".
+    # If allow_back/allow_exit is True, user may enter "back"/"exit" (not case-sensitive).
+    # min_num/max_num should only be set to integers or floats. If set to True, no effect.
     # Returns False is failed. Returns the user's input as string if succeeds.
-    def validate_user_input_num(self, user_input, float_num = True, negative_num = True, zero_num = True, positive_num = True, allow_back = False, allow_exit = False):
-        self.check_types_to_raise_exc((user_input, float_num, negative_num, zero_num, positive_num, allow_back), ((str, int, float), bool, bool, bool, bool, bool), ("user_input", "float_num", "negative_num", "zero_num", "positive_num", "allow_back"))
+    def validate_user_input_num(self, user_input, float_num = True, negative_num = True, zero_num = True, positive_num = True, min_num = False, max_num = False, allow_back = False, allow_exit = False):
+        self.check_types_to_raise_exc(
+            (user_input, float_num, negative_num, zero_num, positive_num, min_num, max_num, allow_back, allow_exit),
+            ((str, int, float), bool, bool, bool, bool, (bool, int, float), (bool, int, float), bool, bool),
+            ("user_input", "float_num", "negative_num", "zero_num", "positive_num", "min_num", "max_num", "allow_back", "allow_exit")
+        )
 
         # Checking if all criteria are set to False (nothing would pass this check)
         if negative_num == False and zero_num == False and positive_num == False:
-            input("\nAll real numbers are excluded by this criteria.\n(Press Enter.)\n\n")
-            return False
+            raise InvalidValidateNumSettings
 
         # Invalid entry messages to user
         invalid_num = "\nYour input must be a number.\n\n(Press Enter.)\n"
@@ -19,6 +24,8 @@ class DataValidation:
         invalid_negative_num = "\nYour input may not be negative.\n\n(Press Enter.)\n"
         invalid_zero_num = "\nYour input may not be zero.\n\n(Press Enter.)\n"
         invalid_positive_num = "\nYour input may not be positive.\n\n(Press Enter.)\n"
+        invalid_min_num = f"\nYour input may not be below {min_num}."
+        invalid_max_num = f"\nYour input may not be below {max_num}."
 
         user_input = user_input.strip().lower()
         orig_user_input = user_input.strip()
@@ -55,6 +62,16 @@ class DataValidation:
         if positive_num == False:
             if user_input > 0:
                 input(invalid_positive_num)
+                return False
+
+        if min_num != False:
+            if user_input < min_num:
+                input(invalid_min_num)
+                return False
+
+        if max_num != False:
+            if user_input > max_num:
+                input(invalid_max_num)
                 return False
 
         return orig_user_input
@@ -126,6 +143,24 @@ class DataValidation:
 
         return False
 
+    # Validates user input against a regular expression. By default, searches user_input for regular expression. If fullmatch == True, entire user_input must match.
+    def validate_user_input_regex(self, user_input, regex, fullmatch = False, allow_back = False, allow_exit = False):
+        user_input = user_input.strip()
+        user_input_l = user_input.lower()
+
+        if allow_exit == True:
+            if user_input_l == "exit": return "exit"
+
+        if allow_back == True:
+            if user_input_l == "back": return "back"
+
+        if fullmatch == True:
+            if re.fullmatch(regex, user_input) == None: return False
+        else:
+            if re.search(regex, user_input) == None: return False
+
+        return user_input
+
     # Checks numerous variables to ensure they are the correct type. Raises exception if type is incorrect.
     # All arguments MUST be lists/tuples, even if they have only one element. (Note that if checking just one element, just doing the check directly, without check_to_raise_exc(), and then directly callin InvalidTypePassed(), is better.)
     # vars_to_check is a list/tuple of all variables to validate type
@@ -163,4 +198,9 @@ class InvalidListLength(Exception):
     def __init__(self, lists_tuples):
         lists_tuples_to_user = ", ".join([l_t for l_t in lists_tuples])
         message = f"These lists/tuples have unmatched lengths: {lists_tuples_to_user}. Lengths must match."
+        super().__init__(message)
+
+class InvalidValidateNumSettings(Exception):
+    def __init__(self):
+        message = "All real numbers are excluded by this criteria. Modify code to allow some user input to pass."
         super().__init__(message)
