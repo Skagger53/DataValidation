@@ -143,6 +143,21 @@ class DataValidation:
 
         return False
 
+    # Validates user_input as an email address.
+    # Checks general formatting with regex and then checks for invalid characters.
+    def validate_user_input_email(self, user_input):
+        invalid_chars = (":", "–", "[", "´", ";", "—", "]", "&", ",", "<", "(", "\\", "“", '"', ">", ")", " ")
+        user_input = user_input.strip()
+
+        if re.fullmatch(".+@.+\..+", user_input) == None: return False
+        if user_input.count("@") != 1: return False
+
+        for char in invalid_chars:
+            if char in user_input: return False
+
+        return user_input
+
+
     # Validates user input against a regular expression. By default, searches user_input for regular expression. If fullmatch == True, entire user_input must match.
     def validate_user_input_regex(self, user_input, regex, fullmatch = False, allow_back = False, allow_exit = False):
         user_input = user_input.strip()
