@@ -25,7 +25,7 @@ class DataValidation:
         invalid_zero_num = "\nYour input may not be zero.\n\n(Press Enter.)\n"
         invalid_positive_num = "\nYour input may not be positive.\n\n(Press Enter.)\n"
         invalid_min_num = f"\nYour input may not be below {min_num}."
-        invalid_max_num = f"\nYour input may not be below {max_num}."
+        invalid_max_num = f"\nYour input may not be above {max_num}."
 
         user_input = user_input.strip().lower()
         orig_user_input = user_input.strip()
@@ -156,7 +156,6 @@ class DataValidation:
             if char in user_input: return False
 
         return user_input
-
 
     # Validates user input against a regular expression. By default, searches user_input for regular expression. If fullmatch == True, entire user_input must match.
     def validate_user_input_regex(self, user_input, regex, fullmatch = False, allow_back = False, allow_exit = False):
