@@ -78,7 +78,7 @@ class DataValidation:
 
     # Validates user input based on custom tuple in "acceptable" argument.
     # This does not loop; this should be called within a loop obtaining user's input.
-    # user_input is not case-sensitive. Elements in acceptable list/tuple are case-sensitive. (Ideally elements in acceptable should each be all lower case or all upper case.)
+    # Not case-senstiive. E.g., "mn" matches "MN".
     # If allow_back is True, user may enter "back".
     # Returns False for a failed check. Returns "back" if user wants to go back. Returns stripped user's input if succeeded.
     def validate_user_input_custom(self, user_input, acceptable, allow_back = False, allow_exit = False):
@@ -95,7 +95,7 @@ class DataValidation:
         if allow_exit == True:
             if user_input_l == "exit": return "exit"
 
-        if user_input in acceptable or user_input.capitalize() in acceptable or user_input_l in acceptable: return user_input
+        if user_input in acceptable or user_input.capitalize() in acceptable or user_input_l in acceptable or user_input.upper() in acceptable: return user_input
 
         return False
 
